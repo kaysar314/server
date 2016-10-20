@@ -67,10 +67,10 @@ player = {}
 foods = {}
 data = {}
     
-SERVER = '127.0.0.1'
-PORT = 8088
-MAXTHREADS = 10
-RECVBUFLEN = 1024
+SERVER = '139.129.59.141'
+PORT = 6666
+MAXTHREADS = 20
+RECVBUFLEN = 10240
   
 class ComunicateServer(threading.Thread):
     def __init__(self, clientsocket, address, num):
@@ -128,7 +128,7 @@ class ListenServer(threading.Thread):
             cs,address = self.socket.accept()  
             comser = ComunicateServer(cs, address, num)  
             comser.start()  
-            num += 1  
+            num += 1
             print 'Listen Next...'  
         self.socket.close()  
   
