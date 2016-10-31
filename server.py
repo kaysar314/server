@@ -1,60 +1,3 @@
-# #!/usr/bin/env python 
-# import SocketServer 
-# from time import ctime 
-# import simplejson
-# import threading
-
-# lock = threading.Lock()
-
-# player = {}
-# foods = {}
-# data = {}
-
-# HOST = '127.0.0.1' 
-# PORT = 8080 
-# ADDR = (HOST, PORT) 
-
-# class MyRequestHandler(SocketServer.BaseRequestHandler): 
-#    def handle(self): 
-#        # print '...connected from:', self.client_address
-#        while True: 
-#             lock.acquire()
-#             print self.client_address
-#             try:
-#                 ddd = self.request.recv(10240)
-#             except:
-#                 self.close()
-#             dic = simplejson.loads(ddd)
-#             data[dic["name"]] = {"snakePos":dic["mySnakePos"],"color":dic["color"],"live":dic["live"]}
-#             sendData = {}
-#             sendData["map"] = 1
-
-#             if dic.get("type") == "ctor":
-#                 player[dic["name"]] = ''
-#                 print "player num: ",len(player)
-#                 if len(player) == 1:
-#                     print "has no food"
-#                     sendData["food"] = 0
-#                 # else:
-#                 #     print "get food"
-#                 #     sendData["food"] = foods
-#             else:
-#                 if dic["food"] != 0:
-#                     foods = dic["food"]
-#             sendData["data"] = data
-#             # print self.client_address,": \n",data,"\n"
-#             self.request.sendall(simplejson.dumps(sendData)+'\n')
-#             lock.release()
-           
-# tcpServ = SocketServer.ThreadingTCPServer(ADDR, MyRequestHandler) 
-# print 'waiting for connection...' 
-# while True:
-#     try:
-#         tcpServ.serve_forever(poll_interval=0.5)
-#     except:
-#         continue
-
-
 #!/usr/bin/env python    
 #encoding: utf-8  
 import simplejson
@@ -68,7 +11,7 @@ foods = {}
 data = {}
 
 addNew = ["false"]
-    
+
 SERVER = '127.0.0.1'
 PORT = 6666
 MAXTHREADS = 20
@@ -86,9 +29,9 @@ class ComunicateServer(threading.Thread):
         while True:
             try:
                 d = self.socket.recv(10240)
+                dic = simplejson.loads(d)
             except:
                 break
-            dic = simplejson.loads(d)
             sendData = {}
             sendData["map"] = 1
 
@@ -128,7 +71,10 @@ class ComunicateServer(threading.Thread):
             self.socket.send(simplejson.dumps(sendData)+'\n')
         del data[str(self.address[1])]
         del player[str(self.address[1])]
-        self.socket.close()  
+        print "delete!"
+        if len(player) == 0:
+            foods = {}
+        self.socket.close()
 
 class ListenServer(threading.Thread):
     def __init__(self):
