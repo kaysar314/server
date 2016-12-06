@@ -5,7 +5,7 @@ var pool = mysql.createPool({
 	host: 'localhost',
 	user: 'root',
 	password: '123456',
-	database: 'db_user'
+	database: 'sozdik'
 });
 
 // var app = require('express')();
@@ -21,7 +21,7 @@ io.on('connection',function(socket){
 
 	socket.on('login',function(user){
 		
-		var sql = 'select * from t_user where t_user.userName=? and t_user.password=?';
+		var sql = 'select * from sozdik_user where sozdik_user.userName=? and sozdik_user.password=?';
 		var values = [];
 		
 		console.log('username: '+user.userName);
@@ -43,8 +43,8 @@ io.on('connection',function(socket){
 
 	socket.on('register',function(user){
 		
-		var sql = 'INSERT INTO t_user(userName, password, email) VALUES(?,?,?)';
-		var emailsql = 'select * from t_user where t_user.email=?'
+		var sql = 'INSERT INTO sozdik_user(userName, password, email) VALUES(?,?,?)';
+		var emailsql = 'select * from sozdik_user where sozdik_user.email=?'
 		
 		var values = [];
 		var result = {};
@@ -78,6 +78,37 @@ io.on('connection',function(socket){
 				socket.emit('register', result);
 			}
 		})
+	})
+
+	socket.on('sozizdew',function(soz){
+		
+		// var sql = 'select * from sozder where sozder.userName=? and t_user.password=?';
+		var values = [];
+		var result = [];
+
+		var name = ['aydana','kaysar','jasar','vinara','akterek'];
+		if (soz == '1'||soz == '2'||soz == '3'||soz == '4'||soz == '5'){
+
+		for (var i = 0; i < Number(soz); i++){
+			result.push(name[i]);
+		}
+
+		socket.emit('sozizdew', {'sozders': result});
+		console.log('izdegen soz: '+soz);
+
+		}
+		
+		// values.push(soz);
+
+		// pool.query({sql:sql,values:values},function(err, rows, fields){
+		// 	if (rows.length == 0){
+		// 		result = {isSucceed: false};
+				
+		// 	}else{
+		// 		result = {isSucceed: true, id: rows[0].userid, email: rows[0].email};
+		// 		socket.emit('sozizdew', result);
+		// 	}
+		// })
 	})
 });
 
