@@ -11,8 +11,8 @@ var rounds = {};
 var wakit = {};
 var paths = {};
 
-var sozs = ['istakan','janim','awmaydi','kazakh','yman','batir','abay','sarimay','kaskir'];
-
+var sozall = [{"kk":"ел","ka":"ەل","uzindik":"2","eskert":"әйтеу сұрайсың"},{"kk":"айу","ka":"ايۋ","uzindik":"3","eskert":"айуан"},{"kk":"терек","ka":"تەرەك","uzindik":"5","eskert":"бйык"},{"kk":"бақыр","ka":"باقىر","uzindik":"5","eskert":"етыстык"},{"kk":"құмырысқа","ka":"قۇمىرىسقا","uzindik":"9","eskert":"жандык"},{"kk":"тегын","ka":"تەگىن","uzindik":"5","eskert":"кім жақсы көрмейды"},{"kk":"озық","ka":"وزىق","uzindik":"4","eskert":"бірінші"},{"kk":"жасыр","ka":"جاسىر","uzindik":"5","eskert":"таба алмайсың"},{"kk":"шекара","ka":"شەكارا","uzindik":"6","eskert":"тосасың ақырын"},{"kk":"дауыс","ka":"داۋىس","uzindik":"5","eskert":""},{"kk":"өсек","ka":"وسەك","uzindik":"4","eskert":""},{"kk":"шеше","ka":"شەشە","uzindik":"4","eskert":""},{"kk":"аумайды","ka":"اۋمايدى","uzindik":"7","eskert":""},{"kk":"қазы","ka":"قازى","uzindik":"4","eskert":""},{"kk":"айран","ka":"ايران","uzindik":"5","eskert":""},{"kk":"сарымай","ka":"سارىماي","uzindik":"7","eskert":""},{"kk":"абай","ka":"اباي","uzindik":"4","eskert":""},{"kk":"қазақ","ka":"قازاق","uzindik":"5","eskert":""},{"kk":"батыр","ka":"باتىر","uzindik":"5","eskert":""},{"kk":"стакан","ka":"ستاكان","uzindik":"6","eskert":""},{"kk":"жұмыртқа","ka":"جۇمىرتقا","uzindik":"8","eskert":""},{"kk":"компютер","ka":"كومپيۋتەر","uzindik":"8","eskert":""},{"kk":"сағат","ka":"ساعات","uzindik":"5","eskert":""},{"kk":"кино","ka":"كينو","uzindik":"4","eskert":""},{"kk":"орда","ka":"وردا","uzindik":"4","eskert":""},{"kk":"музыка","ka":"مۋزىكا","uzindik":"6","eskert":""},{"kk":"айдана","ka":"ايدانا","uzindik":"6","eskert":""},{"kk":"қайсар","ka":"قايسار","uzindik":"6","eskert":""},{"kk":"тау","ka":"تاۋ","uzindik":"3","eskert":""},{"kk":"өсекшы","ka":"وسەكشى","uzindik":"6","eskert":""},{"kk":"шағала","ka":"شاعالا","uzindik":"6","eskert":""},{"kk":"кылт","ka":"كىلت","uzindik":"4","eskert":""},{"kk":"жұма","ka":"جۇما","uzindik":"4","eskert":""},{"kk":"наурыз","ka":"ناۋرىز","uzindik":"6","eskert":""},{"kk":"абылай","ka":"ابىلاي","uzindik":"6","eskert":""},{"kk":"мұнай","ka":"مۇناي","uzindik":"5","eskert":""},{"kk":"сұлу","ka":"سۇلۋ","uzindik":"4","eskert":""},{"kk":"алаш","ka":"الاش","uzindik":"4","eskert":""},{"kk":"жұзык","ka":"جۇزىك","uzindik":"5","eskert":""},{"kk":"шашу","ka":"شاشۋ","uzindik":"4","eskert":""},{"kk":"домбыра","ka":"دومبىرا","uzindik":"7","eskert":""},{"kk":"қозы","ka":"قوزى","uzindik":"4","eskert":""},{"kk":"мұрын","ka":"مۇرىن","uzindik":"5","eskert":""},{"kk":"жанбас","ka":"جانباس","uzindik":"6","eskert":""},{"kk":"қағаз","ka":"قاعاز","uzindik":"5","eskert":""},{"kk":"тай","ka":"تاي","uzindik":"3","eskert":""},{"kk":"зат","ka":"زات","uzindik":"3","eskert":""},{"kk":"шаугым","ka":"شاۋگىم","uzindik":"6","eskert":""},{"kk":"ақша","ka":"اقشا","uzindik":"4","eskert":""},{"kk":"отыр","ka":"وتىر","uzindik":"4","eskert":""}];
+var sozs = {};
 var kazirSoz = {};
 var kazirSizwxi = {};
 var turaSan = {};
@@ -104,7 +104,10 @@ io.on('connection',function(socket){
 
 	socket.on('sendWord',function(word){
 		var rn = word.roomname;
-		if(word.word == kazirSoz[rn] && word.word != ''){
+
+		if(kazirSoz[rn] != ''){
+		
+		if(word.word == kazirSoz[rn].kk || word.word == kazirSoz[rn].ka){
 			word.word = word.name+' tura aytti~~';
 			io.sockets.in(rn).emit('nomirkosw', [{id:word.id,kos:2-Math.floor(turaSan[rn]/3)+1},{id:kazirSizwxi[rn],kos:1}]);
 			turaSan[rn]++;
@@ -117,6 +120,8 @@ io.on('connection',function(socket){
 			if(ixindeDrawerCount == turaSan[rn]+1){
 				wakit[rn] = 0;
 			}
+		}
+
 		}
 		io.sockets.in(word.roomname).emit('getWord', word);
 		console.log('user sendWord: '+word.word);
@@ -213,6 +218,15 @@ io.on('connection',function(socket){
 			rounds[rn].num = -1;
 			rounds[rn].total = drawersSum*2;
 			wakit[rn] = 60;
+			sozs[rn] = [];
+			for (var si = 0; si < rounds[rn].total; si++){
+				var ra = Math.floor(Math.random()*sozall.length);
+				sozs[rn].push(sozall[ra]);
+				sozall.splice(ra,1);
+			}
+			for(var sli = 0; sli<sozs[rn].length;sli++){
+				sozall.push(sozs[rn][sli]);
+			}
 
 			sizwBasta();
 
@@ -258,11 +272,11 @@ io.on('connection',function(socket){
 						io.sockets.emit('update rooms basta', {roomname:rn,basta:false,sum:rooms[rn].drawers.length});
 						
 					}else{
-						kazirSoz[rn] = '';
 						kazirSizwxi[rn] = '';
 						wakit[rn] = 60;
 						turaSan[rn] = 0;
 						io.sockets.in(rn).emit('birSizwBitw', {soz:kazirSoz[rn]});
+						kazirSoz[rn] = '';
 						setTimeout(sizwBasta,4000);
 					}
 				}
@@ -280,8 +294,8 @@ io.on('connection',function(socket){
 				console.log('start round '+rounds[rn].num);
 				if (rounds[rn].num < rounds[rn].total){
 					kazirSizwxi[rn] = rooms[rn].drawers[rounds[rn].num%drawersSum].id;
-					kazirSoz[rn] = sozs[rounds[rn].num];
-					io.sockets.in(rn).emit('sizwBasta', {drawer:kazirSizwxi[rn],soz:kazirSoz[rn],sozEskert:'kazakhxa'});
+					kazirSoz[rn] = sozs[rn].shift();
+					io.sockets.in(rn).emit('sizwBasta', {drawer:kazirSizwxi[rn],soz:kazirSoz[rn],sozEskert:kazirSoz[rn].uzindik+', '+kazirSoz[rn].eskert});
 					countSizwSec();
 				}
 				else{
