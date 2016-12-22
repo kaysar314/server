@@ -82,33 +82,17 @@ io.on('connection',function(socket){
 
 	socket.on('sozizdew',function(soz){
 		
-		// var sql = 'select * from sozder where sozder.userName=? and t_user.password=?';
-		var values = [];
-		var result = [];
+		var sql = 'select * from kt2kz where kt2kz.kt=?';
 
-		var name = ['aydana','kaysar','jasar','vinara','akterek'];
-		if (soz == '1'||soz == '2'||soz == '3'||soz == '4'||soz == '5'){
-
-		for (var i = 0; i < Number(soz); i++){
-			result.push(name[i]);
-		}
-
-		socket.emit('sozizdew', {'sozders': result});
-		console.log('izdegen soz: '+soz);
-
-		}
-		
-		// values.push(soz);
-
-		// pool.query({sql:sql,values:values},function(err, rows, fields){
-		// 	if (rows.length == 0){
-		// 		result = {isSucceed: false};
+		pool.query({sql:sql,values:[soz]},function(err, rows, fields){
+			if (rows.length == 0){
+				result = {isSucceed: false};
 				
-		// 	}else{
-		// 		result = {isSucceed: true, id: rows[0].userid, email: rows[0].email};
-		// 		socket.emit('sozizdew', result);
-		// 	}
-		// })
+			}else{
+				result = {isSucceed: true, sozder:rows};
+				socket.emit('sozizdew', result);
+			}
+		})
 	})
 });
 

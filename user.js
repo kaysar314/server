@@ -90,49 +90,25 @@ io.on('connection',function(socket){
 
 	socket.on('sozizdew',function(soz){
 		
-		// var sql = 'select * from sozder where sozder.userName=? and t_user.password=?';
-		var values = [];
-		var result = [];
+		var sql = 'select * from kt2kz where kt2kz.kt=?';
+		var values = [soz];
 
-		var name = ['aydana','kaysar','jasar','vinara','akterek'];
-		if (soz == '1'||soz == '2'||soz == '3'||soz == '4'||soz == '5'){
+		pool.query({sql:sql,values:values},function(err, rows, fields){
+			if (rows.length == 0){
+				result = {isSucceed: false};
+				socket.emit('sozizdew', result);
+			}else{
 
-		for (var i = 0; i < Number(soz); i++){
-			result.push(name[i]);
-		}
+				result = {isSucceed: true, sozder: rows};
+				socket.emit('sozizdew', result);
+			}
+		})
 
-		socket.emit('sozizdew', {'sozders': result});
 		console.log('izdegen soz: '+soz);
 
 		}
-		
-		// values.push(soz);
-
-		// pool.query({sql:sql,values:values},function(err, rows, fields){
-		// 	if (rows.length == 0){
-		// 		result = {isSucceed: false};
-				
-		// 	}else{
-		// 		result = {isSucceed: true, id: rows[0].userid, email: rows[0].email};
-		// 		socket.emit('sozizdew', result);
-		// 	}
-		// })
 	})
 });
-
-// app.get('/', function(req, res){
-// 	pool.query('select * from t_user'
-// 		,function(err, rows, fields){
-// 			for (var row of rows) {
-// 				var result = '';
-// 				for(var field of fields){
-// 					result += (' ' + row[field.name])
-// 				}
-// 				console.log(result);
-// 				res.send(result);
-// 			}
-// 		});
-// });
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

@@ -5,6 +5,8 @@
 
   <title>Cocos Creator | sozdik</title>
 
+
+  <meta http-equiv="expires" content="mon, 18 apr 2018 14:30:00 GMT">
   <!--http://www.html5rocks.com/en/mobile/mobifying/-->
   <meta name="viewport"
         content="width=device-width,user-scalable=no,initial-scale=1, minimum-scale=1,maximum-scale=1,target-densitydpi=device-dpi"/>
@@ -39,6 +41,7 @@
 
   <link rel="stylesheet" type="text/css" href="style-mobile.css"/>
 
+
 </head>
 <body>
   <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
@@ -47,6 +50,19 @@
       <span style="width: 0%"></span>
     </div>
   </div>
+<script charset="utf-8">
+  var splash = document.getElementById('splash');
+  var progressBar = splash.querySelector('.progress-bar span');
+  var i = 0;
+  count();
+  function count(){
+    if (i<=80){
+      progressBar.style.width = i.toFixed(2) + '%';
+      i++;
+      setTimeout("count()",100);
+    }
+  }
+</script>
 <script src="src/settings.js" charset="utf-8"></script>
 <script src="main.js" charset="utf-8"></script>
 

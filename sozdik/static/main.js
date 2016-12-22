@@ -36,8 +36,9 @@
             var progressBar = splash.querySelector('.progress-bar span');
             cc.loader.onProgress = function (completedCount, totalCount, item) {
                 var percent = 100 * completedCount / totalCount;
-                if (progressBar) {
+                if (progressBar && percent > Number(progressBar.style.width.replace('%',''))) {
                     progressBar.style.width = percent.toFixed(2) + '%';
+                    i = 100;
                 }
             };
             splash.style.display = 'block';
@@ -141,8 +142,10 @@
         splash.style.display = 'block';
 
         var cocos2d = document.createElement('script');
+        
+        // cocos2d.src = window._CCSettings.debug ? 'cocos2d-js.js' : 'cocos2d-js-min.js';
         cocos2d.async = true;
-        cocos2d.src = window._CCSettings.debug ? 'cocos2d-js.js' : 'cocos2d-js-min.js';
+        cocos2d.src = 'http://139.129.59.141/cocos2d-js-min.js';
 
         var engineLoaded = function () {
             document.body.removeChild(cocos2d);

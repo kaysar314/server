@@ -5,14 +5,6 @@
   "dependencies": {
     "express": "^4.14.0",
     "mysql": "^2.12.0",
-    "socket.io": "^1.7.2",
-    "co": "^4.0",       
-	"koa": "^0.14.0",　
-	"koa-mount": "*", 
-	"koa-ejs": "*",
-	"koa-static": "*",
-	"koa-router": "*",
-	"koa-session": "*",
-	"co-body": "*"
+    "socket.io": "^1.7.2"
   }
 }
